@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MedApp - Medicine Tracker</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <header>
+        <div class="logo">MedApp</div>
+        <nav>
+            <ul>
+                <li><a href="#" class="active" data-section="dashboard"><i class="fas fa-home"></i> Dashboard</a></li>
+                <li><a href="#" data-section="medicines"><i class="fas fa-pills"></i> Medicines</a></li>
+                <li><a href="#" data-section="expenses"><i class="fas fa-money-bill-wave"></i> Expenses</a></li>
+                <li><a href="#" data-section="reports"><i class="fas fa-chart-bar"></i> Reports</a></li>
+            </ul>
+        </nav>
+        <div class="user-info">
+            <span id="current-date"></span>
+        </div>
+    </header>
+
+    <main>
+        <!-- Dashboard Section -->
+        <section id="dashboard" class="content-section active">
+            <h2><i class="fas fa-home"></i> Dashboard</h2>
+            <div class="dashboard-grid">
+                <div class="card alert-card">
+                    <h3><i class="fas fa-bell"></i> Alerts</h3>
+                    <div id="alerts-container"></div>
+                </div>
+                <div class="card today-meds-card">
+                    <h3><i class="fas fa-list"></i> Today's Medicines</h3>
+                    <div id="today-meds-container"></div>
+                </div>
+                <div class="card low-stock-card">
+                    <h3><i class="fas fa-exclamation-triangle"></i> Low Stock</h3>
+                    <div id="low-stock-container"></div>
+                </div>
+                <div class="card today-expenses-card">
+                    <h3><i class="fas fa-coins"></i> Total Expenses</h3>
+                    <div id="today-expenses-container"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Medicines Section -->
+        <section id="medicines" class="content-section">
+            <div class="section-header">
+                <h2><i class="fas fa-pills"></i> Medicines</h2>
+                <button id="add-medicine-btn" class="btn-primary"><i class="fas fa-plus"></i> Add Medicine</button>
+            </div>
+            
+            <div class="medicine-form-container" id="medicine-form-container" style="display: none;">
+                <form id="medicine-form">
+                    <input type="hidden" id="medicine-id">
+                    <div class="form-group">
+                        <label for="medicine-name">Name</label>
+                        <input type="text" id="medicine-name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="medicine-dosage">Dosage</label>
+                        <input type="text" id="medicine-dosage" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="medicine-stock">Stock Count</label>
+                        <input type="number" id="medicine-stock" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="medicine-timing">Timing</label>
+                        <input type="text" id="medicine-timing" placeholder="e.g., Morning, Night">
+                    </div>
+                    <div class="form-group">
+                        <label for="medicine-price">Price Per Unit</label>
+                        <input type="number" step="0.01" id="medicine-price">
+                    </div>
+                    <div class="form-buttons">
+                        <button type="submit" class="btn-primary">Save</button>
+                        <button type="button" id="cancel-medicine-btn" class="btn-secondary">Cancel</button>
+                    </div>
+                </form>
+            </div>
+            
+            <div class="table-container">
+                <table id="medicines-table">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Dosage</th>
+                            <th>Stock</th>
+                            <th>Timing</th>
+                            <th>Price</th>
+                            <th>Taken Today</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="medicines-list">
+                        <!-- Medicines will be loaded here -->
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Expenses Section -->
+        <section id="expenses" class="content-section">
+            <div class="section-header">
+                <h2><i class="fas fa-money-bill-wave"></i> Expenses</h2>
+                <button id="add-expense-btn" class="btn-primary"><i class="fas fa-plus"></i> Add Expense</button>
+            </div>
+            
+            <div class="expense-form-container" id="expense-form-container" style="display: none;">
+                <form id="expense-form">
+                    <input type="hidden" id="expense-id">
+                    <div class="form-group">
+                        <label for="expense-date">Date</label>
+                        <input type="date" id="expense-date" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="expense-medicine">Medicine</label>
+                        <select id="expense-medicine" required>
+                            <option value="">Select Medicine</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="expense-amount">Amount</label>
+                        <input type="number" step="0.01" id="expense-amount" required>
+                    </div>
+                    <div class="form-buttons">
+                        <button type="submit" class="btn-primary">Save</button>
+                        <button type="button" id="cancel-expense-btn" class="btn-secondary">Cancel</button>
+                    </div>
+                </form>
+            </div>
+            
+            <div class="table-container">
+                <table id="expenses-table">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Medicine</th>
+                            <th>Amount</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="expenses-list">
+                        <!-- Expenses will be loaded here -->
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Reports Section -->
+        <section id="reports" class="content-section">
+            <h2><i class="fas fa-chart-bar"></i> Reports</h2>
+            
+            <div class="reports-controls">
+                <div class="form-group">
+                    <label for="report-month">Month</label>
+                    <select id="report-month">
+                        <option value="1">January</option>
+                        <option value="2">February</option>
+                        <option value="3">March</option>
+                        <option value="4">April</option>
+                        <option value="5">May</option>
+                        <option value="6">June</option>
+                        <option value="7">July</option>
+                        <option value="8">August</option>
+                        <option value="9">September</option>
+                        <option value="10">October</option>
+                        <option value="11">November</option>
+                        <option value="12">December</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="report-year">Year</label>
+                    <input type="number" id="report-year" min="2000" max="2100" value="2023">
+                </div>
+                <button id="generate-report-btn" class="btn-primary">Generate Report</button>
+            </div>
+            
+            <div class="report-results">
+                <div class="card">
+                    <h3>Monthly Expenses</h3>
+                    <div id="monthly-expenses-chart">
+                        <canvas id="expensesChart"></canvas>
+                    </div>
+                </div>
+                <div class="card">
+                    <h3>Medicine Usage</h3>
+                    <div id="medicine-usage-list">
+                        <!-- Will be populated by JavaScript -->
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>

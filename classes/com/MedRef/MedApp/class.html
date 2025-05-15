@@ -1,0 +1,86 @@
+classDiagram
+    class MedAppApplication {
+        +main(String[] args) void
+    }
+    
+    class WebConfig {
+        -configuration properties
+    }
+    
+    class Medicine {
+        -Long id
+        -String name
+        -String dosage
+        -int quantity
+        -Date expiryDate
+        -boolean needsRefill
+        +getters()
+        +setters()
+    }
+    
+    class Expense {
+        -Long id
+        -double amount
+        -Date date
+        -String description
+        -Medicine medicine
+        +getters()
+        +setters()
+    }
+    
+    class MedicineController {
+        -MedicineService medicineService
+        +getAllMedicines() List~Medicine~
+        +getMedicineById(Long id) Medicine
+        +createMedicine(Medicine medicine) Medicine
+        +updateMedicine(Long id, Medicine medicine) Medicine
+        +deleteMedicine(Long id) void
+        +getMedicinesNeedingRefill() List~Medicine~
+    }
+    
+    class ExpenseController {
+        -ExpenseService expenseService
+        +getAllExpenses() List~Expense~
+        +getExpenseById(Long id) Expense
+        +createExpense(Expense expense) Expense
+        +updateExpense(Long id, Expense expense) Expense
+        +deleteExpense(Long id) void
+        +getExpensesByDateRange(Date start, Date end) List~Expense~
+    }
+    
+    class MedicineService {
+        -MedicineRowMapper medicineRowMapper
+        +getAllMedicines() List~Medicine~
+        +getMedicineById(Long id) Medicine
+        +saveMedicine(Medicine medicine) Medicine
+        +updateMedicine(Long id, Medicine medicine) Medicine
+        +deleteMedicine(Long id) void
+        +checkAndUpdateRefillStatus() void
+        +getMedicinesNeedingRefill() List~Medicine~
+    }
+    
+    class ExpenseService {
+        +getAllExpenses() List~Expense~
+        +getExpenseById(Long id) Expense
+        +saveExpense(Expense expense) Expense
+        +updateExpense(Long id, Expense expense) Expense
+        +deleteExpense(Long id) void
+        +getExpensesByMedicine(Long medicineId) List~Expense~
+        +getExpensesByDateRange(Date start, Date end) List~Expense~
+    }
+    
+    class MedicineRowMapper {
+        +mapRow(ResultSet rs, int rowNum) Medicine
+    }
+    
+    MedAppApplication --> WebConfig
+    
+    Medicine "1" -- "0..*" Expense : has
+    
+    MedicineController --> MedicineService : uses
+    ExpenseController --> ExpenseService : uses
+    
+    MedicineService --> MedicineRowMapper : uses
+    MedicineService --> Medicine : manages
+    ExpenseService --> Expense : manages
+    
